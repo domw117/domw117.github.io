@@ -1,21 +1,187 @@
 <!DOCTYPE html>
 <html>
-<body>
-<head>
+
+<head  class="centeredWide">
 <link rel="stylesheet" type="text/css" href="style.css">
-<h1>GIPHY API How-To Guide</h1>
-<h3>A brief instruction manual on how to setup and use Giphy's API to search and display gifs</h3>
+<div name ="top">
+	<h1>GIPHY API How-To Guide</h1>
+	<h4>A brief instruction manual on how to setup and use Giphy's API to search and display gifs</h4>
+</div>
 </head>
+<body class="centeredWide">
 <div>
-	<h2> What is The GIPHY API? </h2>
-	<p> Good question! But first, you're probably wondering what GIPHY is. Giphy is essentially a searchable database for gifs. When visiting the site, a user can either search for a gif or can upload their own gif, making it available and discoverable to other users of the site. The Giphy API is just an interface that leverages that same database. Utilizing a "Rest-like interface", the Giphy API takes HTTP and HTTPS queries and returns a list of gifs that meet the specifications of said query. Now, if any of those words seemed unfamiliar, don't worry! It's not nearly as complicated as it might sound. Soon enough, you too will be able to get any gif through this API and format it to your liking. Trust me, </p>
+	<h2 class="centeredText"> What is The GIPHY API? </h2>
+	<p> Good question! But first, you're probably wondering what Giph is. Giphy is essentially a searchable database for gifs. You can check it out <a href="http://giphy.com/">here</a>. When visiting the site, a user can either search for a gif or can upload their own gif, making it available and discoverable to other users of the site. The Giphy API is just an interface that leverages that same database. Utilizing a "Rest-like interface", the Giphy API takes HTTP and HTTPS queries and returns a list of gifs that meet the specifications of said query. Now, if any of those words seemed unfamiliar, don't worry! It's not nearly as complicated as it might sound. Soon enough, you too will be able to get any gif through this API and format it to your liking. Trust me, </p>
+	<div class="centeredClose">
 	<img src="http://media2.giphy.com//media//Vccpm1O9gV1g4//giphy.gif">
+	</div>
 </div>
 <div>
-	<table>
-		<legend class="tableOfContentsTitle"><h2>Table of Contents</h2></legend>
-		<tr><a href="#defintions">Definitions</a></tr>
+	
+	<h2>Table of Contents:</h2>
+	<ol>
+		<li><a href="#definitions">Definitions</a></li>
+		<li><a href="#understandingAPI">Understanding an API Request</a></li>
+		<li><a href="#dealingJavascript">Dealing with Javascript</a></li>
+		<li><a href="#searchParams">Utilizing Search Parameters</a></li>
+	</ol>
+</div>
+<div>
+	<a name="definitions">
+	<h2 class="centeredText"> Definitions </h2>
+	<p class="halfRight">Before we start into learning how to use the API, let's first define some terms that I'll be using throughout the guide. Don't worry too much about memorizing these. You can always use this section for reference. </p>
+	<dl>
+		<dt> API: </dt>
+		<dd> API is an acronym that stands for Application Program Interface. Basically, an API is an agreement on language when websites communicate. So, when/if you need something from that specifc website, you can easily make a request and get exactly what you want. But what can an API give you? Quite a lot, actually. Companies like Google, Youtube, and Spotify provide these APIs, so users can utilize their services on their own website. For example, instead of having to build a media player and upload a song to have it play on your website, you can just send a request to the Spotify API to get all of that for you. Pretty useful, right?</dd>
+		<dt> Query: </dt>
+		<dd> In our context, a query will be used to describe the request that we make to an API. </dd>
+		<dt> HTTP/HTTPS: </dt>
+		<dd> Ever notice that HTTP and HTTPS always show up before every website name in a url? HTTP stands for Hypertext Transfer Protocol. We won't get into what it actually is or why it is used, but just know that any talk of HTTP usually means that we are talking about the URL.
+		<dt> JSON: </dt>
+		<dt> Ajax: </dt>
+		<dt> API Key:</dt>
+		<dt> Parameters:</dt>
+	</dl>
+	<a href="#top">Back to the Top</a>
+</div>
+<div>
+	<a name="understandingAPI">
+	<h2 class="centeredText"> Understanding an API Request </h2>
+	<p> To understand an API request, let's first look at one. Consider the example: <a href="http://api.giphy.com/v1/gifs/search?q=batman&api_key=dc6zaTOxFJmzC">http://api.giphy.com/v1/gifs/search?q=batman&api_key=dc6zaTOxFJmzC</a></p>
+	<p> On the surface, this looks like any normal URL. But, if we break it into parts, it's pretty easy to see what's going on.
+	<table border="1px" class="centeredTable">
+		<thead>
+		<th> URL </th>
+		<th> Function </th>
+		<th>Description</th>
+		</thead>
+		<tr>
+			<td><b>http://api.giphy.com/</b></td>
+			<td>Base URL</td>
+			<td> This will always be the first part of the URL that is used for API requests to Giphy.</td>
+		</tr>
+		<tr>
+			<td><b>v1/gifs/search</b></td>
+			<td>Query Type</td>
+			<td> When making an API request, you can designate what type of request you would like to make. In this example, we are designating that we would like to do a search query for gifs. We'll go over this, and other queries that you can make, in the upcoming sections. </td>
+		</tr>
+				<tr>
+			<td><b>?q=batman</b></td>
+			<td>Query Term</td>
+			<td>This is the keyword that we are searching for in this example. What we will get out of this request is the top 25 gifs that correspond to the term "batman". We can also add different search parameters, but we'll go over that later.
+		</tr>
+				<tr>
+			<td><b>api_key=dc6zaTOxFJmzC</b></td>
+			<td>API Key</td>
+			<td> As explained before, the API Key is the codeword that you must include to use the API. Luckily, Giphy has only uses one public API key, so we won't need to worry about getting our own key in this guide.</td>
+		</tr>
 	</table>
+	<p> Not too bad, right? Every API request we make will have the exact same structure as this.</p>
+	<h3> </h3>
+	<p> Now, let's try clicking on the link that we analyzed (<a href="http://api.giphy.com/v1/gifs/search?q=batman&api_key=dc6zaTOxFJmzC">http://api.giphy.com/v1/gifs/search?q=batman&api_key=dc6zaTOxFJmzC</a>). I've displayed a little of what you'll see below. </p>
+	<img src="batmanSearchJSON.png" class="batmanJSONPhoto">
+	<p> This is a JSON array.  Admittedly, it looks messy. But, if you look closely, you'll start to recognize some URLs in the mess. Copying any one of those URLs into your browser will take you to a gif that is related to "batman". Next to those URLs, you'll notice a label that is separated by a colon. This is the "Name" that corresponds to its pair, the "Value" (ex. "url": "http:\/\/giphy.com\/gifs\/batman-gotham-robin-l3V0hWP5as4hPaxbi"). In a JSON object, the parameters are always sorted into these pairs of "Name": "Value". Thus, by knowing the "Name" of the the thing we want, we can use it to get exactly what we need out of our request.</p>
+	<p> If this still doesn't make sense, head back up to the <a href="#definitions">Definitions</a> section for a like to a site that might provide a little more clarity. Otherwise, it's finally time to start writing some code!</p>
+	<a href="#top">Back to the Top</a>
+</div>
+<div>
+	<a name="dealingJavascript">
+	<h2 class="centeredText"> Dealing with Javascript </h2>
+	<p> In this guide, we are going to be handling API requests with Javascript, or more specifically Ajax. As stated before, Ajax is used to make these API requests, send results to Javascript to be processed, and then append HTML with the processed results. To start, let's look at the complete code that makes an API request and look at it piece by piece.</p>
+	<pre>
+	var req = new XMLHttpRequest();
+
+	var base = "http://api.giphy.com/";
+	var query = "v1/gifs/search";
+	var params = "?q=batman";
+	var key = "&api_key=dc6zaTOxFJmzC";
+
+	req.open("GET", base + query + params + key, true);
+
+	req.addEventListener('load', function() {
+  		var response = JSON.parse(req.responseText);
+  		console.log(response.data)
+	});
+	req.send(null);</pre>
+	<p> Now, let's walk through this. We start by declaring the variable:
+	<pre>
+	var req = new XMLHttpRequest();</pre>
+	<p> This assigns a pre-made Javascript object to the variable "req". The object created by XMLHttpRequest() has built-in methods that make it much easier to complete API requests. </p>
+	<p> After that, we declare this set of variables:</p> 
+	<pre>
+	var base = "http://api.giphy.com/";
+	var query = "v1/gifs/search";
+	var params = "?q=batman";
+	var key = "&api_key=dc6zaTOxFJmzC";</pre>
+	<p> If you've been reading carefully, you'll notice that these variables are just the pieces of the URL that I broke up in the last section. We define those pieces separately to keep the code flexible. That way, if we choose to change our query or search parameters later, we only have to change them once.</p>
+	<p> With the next line of code, we finally send our request.
+	<pre>
+	req.open("GET", base + query + params + key, true);</pre>
+	<p> To talk through this line, I'm going to start from the left and explain as we go to the right. At the beginning of this line, we have "req.open(". Remember how I said that we assigned "req" to an object that has built-in methods? Open is one of those methods. It initializes the request using the parameters that you give it. The first parameter we give it is "GET". This tells the API that it is a "GET" request. The next paremeter is just our deconstructed URL. By adding the piece together ( base + query + params + key), we give a complete URL as a parameter. Finally, the "true" indicates that we want to do an asynchronous request. This will be explained more with the last chunk of code.</p>
+	<pre>
+	req.addEventListener('load', function() {
+  		var resp = JSON.parse(req.responseText);
+  		console.log(resp.data)
+	});
+
+	req.send(null);</pre>
+	<p> In the final section, we add an event listener, which will only try to parse the response text if the page loads. We can do this, because we indicated that we wanted to do an asynchronous request. From there, the parsed text is assigned to the variable "resp" and the data parameter is then printed to the console. </p>
+	<p> Feel free to try my example of this located on <a href="http://codepen.io/domw117/pen/eZwNaJ/">CodePen</a>. If you are running this on Chrome, right-click the page and select "Inspect". This will display the page elements and console in a sidebar. When you run the code, you should be able to see an array of objects in that console. This is the data we received from the request. This may seem like an overwhelming amount of data now, but in the next few sections, we'll learn how to limit and utlize this data.</p>
+	<p>Note: This code will become our base for the next few sessions, so please take the time to understand it before moving forward. </p>
+	<a href="#top">Back to the Top</a>
+</div>
+<div>
+	<a name="searchParams">
+	<h2 class="centeredText">Utilizing Search Parameters</h2>
+	<p>In this section, we're going to briefly go over the different queries for the Giphy API that we can use to limit or change the results that we get. </p>
+	<p> For this section, we must recall how we defined our variables to compose the request URL in the previous section:</p>
+	<pre>
+	var base = "http://api.giphy.com/";
+	var query = "v1/gifs/search";
+	var params = "?q=batman";
+	var key = "&api_key=dc6zaTOxFJmzC";</pre>
+	<p> To change how we search, we will only be changing the "query" and "params" variables.
+	<p> We will start by explaining the standard search through the Giphy API. </p>
+	<h3> Search: </h3>
+	<pre>
+	var query = "v1/gifs/search";</pre>
+	<p> We perform a gif search, by setting our "query" variable to the above path. Until now, we've only been utilizing one parameter, "q", with a single term, "batman", but we can do so much better than that. In fact, there are 5 parameters that we can use to limit the search.</p>
+
+	<table class="centeredTable" border="1px solid">
+		<thead>
+			<th>Parameter</th>
+			<th> Required? </th>
+			<th> Description </th>
+		</thead>
+		<tbody>
+			<tr>
+				<td>q</td>
+				<td>YES</td>
+				<td>Search term or phrase used to find results.</td>
+			</tr>
+			<tr>
+				<td>limit</td>
+				<td>NO</td>
+				<td>Limits the number of results returned to the number specified. It is 25, if unspecified. The maximum number of results is 100.</td>
+			</tr>
+			<tr>
+				<td>offset</td>
+				<td>NO</td>
+				<td>Offsets of results. The default is 0.</td>
+			</tr>
+			<tr>
+				<td>rating</td>
+				<td>NO</td>
+				<td>Limits the results by rating: (y, pg, pg-13, r)</td>
+			</tr>
+			<tr>
+				<td>fmt</td>
+				<td>NO</td>
+				<td>Returns results in either HTML or JSON.</td>
+			</tr>
+		</tbody>
+	</table>
+	<p> The 
 </div>
 </body>
 </html>

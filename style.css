@@ -1,12 +1,56 @@
-.centered {
+
+.centeredText {
+	text-align: center;
+}
+
+.centeredClose {
 	margin: auto;
-	width: 50%;
-	padding: 2;
+	width: 40%;
+
+}
+
+.centeredWide {
+	margin: auto;
+	width: 80%;
+	padding: 1;
+}
+
+.centeredTable {
+	margin: auto;
+	width:70%;
+}
+
+.halfRight {
+	margin-right: 40%;
 }
 
 
-.tableOfContentsTitle {
+img {
+	max-width: 90%;
+	border: 1px solid;
 	margin: auto;
-	width: 90%;
-	padding: 2;
+}
+
+dt {
+	font-weight: bold;
+}
+
+td {
+	text-align: center;
+}
+
+p {
+	font-size: 105%;
+}
+
+h3 {
+	font-size: 150%;
+}
+
+pre {
+	margin:auto;
+	width: 50%;
+	font-size: 105%;
+	background-color: #f2eaea;
+	border-radius: 4px;
 }
