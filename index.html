@@ -24,6 +24,8 @@
 		<li><a href="#understandingAPI">Understanding an API Request</a></li>
 		<li><a href="#dealingJavascript">Dealing with Javascript</a></li>
 		<li><a href="#searchParams">Utilizing Search Parameters</a></li>
+		<li><a href="#workingResponse">Working with the Response</a></li>
+		<li><a href="#htmlSection">From JSON to HTML</a></li>
 	</ol>
 </div>
 <div>
@@ -38,9 +40,13 @@
 		<dt> HTTP/HTTPS: </dt>
 		<dd> Ever notice that HTTP and HTTPS always show up before every website name in a url? HTTP stands for Hypertext Transfer Protocol. We won't get into what it actually is or why it is used, but just know that any talk of HTTP usually means that we are talking about the URL.
 		<dt> JSON: </dt>
+		<dd> This stands for JavaScript Object Notation. It's an easily readible syntax that is used for sending and storing data. I won't be going over too much in this guide, so please check out this <a href="http://www.w3schools.com/json/">reference</a>, if you are unfamiliar with it.</dd>
 		<dt> Ajax: </dt>
+		</dd> This stands for Asynchronous Javascript and XML. We won't really be using the XML aspect in this guide, but we will be heavily using Javascript. For extra info on Ajax, check out this <a href="http://www.w3schools.com/ajax/"> reference </a>.
 		<dt> API Key:</dt>
+		<dd> An API key is a passcode that computer's use to verify that an API request is authorized. To make an API request, a user must always include the API Key in the query.</dd>
 		<dt> Parameters:</dt>
+		<dd> A parameter is basically an argument that is passed into a function. In this guide, we'll be using the term parameter to describe the argument that we include with a search query.
 	</dl>
 	<a href="#top">Back to the Top</a>
 </div>
@@ -80,7 +86,7 @@
 	<h3> </h3>
 	<p> Now, let's try clicking on the link that we analyzed (<a href="http://api.giphy.com/v1/gifs/search?q=batman&api_key=dc6zaTOxFJmzC">http://api.giphy.com/v1/gifs/search?q=batman&api_key=dc6zaTOxFJmzC</a>). I've displayed a little of what you'll see below. </p>
 	<img src="batmanSearchJSON.png" class="batmanJSONPhoto">
-	<p> This is a JSON array.  Admittedly, it looks messy. But, if you look closely, you'll start to recognize some URLs in the mess. Copying any one of those URLs into your browser will take you to a gif that is related to "batman". Next to those URLs, you'll notice a label that is separated by a colon. This is the "Name" that corresponds to its pair, the "Value" (ex. "url": "http:\/\/giphy.com\/gifs\/batman-gotham-robin-l3V0hWP5as4hPaxbi"). In a JSON object, the parameters are always sorted into these pairs of "Name": "Value". Thus, by knowing the "Name" of the the thing we want, we can use it to get exactly what we need out of our request.</p>
+	<p> This is a JSON array.  Admittedly, it looks messy. But, if you look closely, you'll start to recognize some URLs in the mess. Copying any one of those URLs into your browser will take you to a gif that is related to "batman". Next to those URLs, you'll notice a label that is separated by a colon. This is the "Name" that corresponds to its pair, the "Value" (ex. "url": "http:\/\/giphy.com\/gifs\/batman-gotham-robin-l3V0hWP5as4hPaxbi"). In a JSON object, the properties are always sorted into these pairs of "Name": "Value". Thus, by knowing the "Name" of the the thing we want, we can use it to get exactly what we need out of our request.</p>
 	<p> If this still doesn't make sense, head back up to the <a href="#definitions">Definitions</a> section for a like to a site that might provide a little more clarity. Otherwise, it's finally time to start writing some code!</p>
 	<a href="#top">Back to the Top</a>
 </div>
@@ -100,7 +106,7 @@
 
 	req.addEventListener('load', function() {
   		var response = JSON.parse(req.responseText);
-  		console.log(response.data)
+  		console.log(response)
 	});
 	req.send(null);</pre>
 	<p> Now, let's walk through this. We start by declaring the variable:
@@ -120,13 +126,17 @@
 	<p> To talk through this line, I'm going to start from the left and explain as we go to the right. At the beginning of this line, we have "req.open(". Remember how I said that we assigned "req" to an object that has built-in methods? Open is one of those methods. It initializes the request using the parameters that you give it. The first parameter we give it is "GET". This tells the API that it is a "GET" request. The next paremeter is just our deconstructed URL. By adding the piece together ( base + query + params + key), we give a complete URL as a parameter. Finally, the "true" indicates that we want to do an asynchronous request. This will be explained more with the last chunk of code.</p>
 	<pre>
 	req.addEventListener('load', function() {
-  		var resp = JSON.parse(req.responseText);
-  		console.log(resp.data)
+  		var response = JSON.parse(req.responseText);
+  		console.log(response.data)
 	});
 
 	req.send(null);</pre>
-	<p> In the final section, we add an event listener, which will only try to parse the response text if the page loads. We can do this, because we indicated that we wanted to do an asynchronous request. From there, the parsed text is assigned to the variable "resp" and the data parameter is then printed to the console. </p>
-	<p> Feel free to try my example of this located on <a href="http://codepen.io/domw117/pen/eZwNaJ/">CodePen</a>. If you are running this on Chrome, right-click the page and select "Inspect". This will display the page elements and console in a sidebar. When you run the code, you should be able to see an array of objects in that console. This is the data we received from the request. This may seem like an overwhelming amount of data now, but in the next few sections, we'll learn how to limit and utlize this data.</p>
+	<p> In the final section, we add an event listener, which will only try to parse the response text if the page loads. We can do this, because we indicated that we wanted to do an asynchronous request. From there, the parsed text is assigned to the variable "response" and the "data" property is then printed to the console. </p>
+	<p> Feel free to try my example of this located on <a href="http://codepen.io/domw117/pen/eZwNaJ/">CodePen</a>. If you are running this on Chrome, right-click the page and select "Inspect". This will display the page elements and console in a sidebar. When you run the code, you should be able to see an array of objects in that console. This is the data we received from the request. It should look like this:</p>
+	<div class="centeredClose">
+		<img src="arrayOfObjectsExample.png">
+	</div>
+	<p>This may seem like an overwhelming amount of data now, but in the next few sections, we'll learn how to limit and utlize this data.</p>
 	<p>Note: This code will become our base for the next few sessions, so please take the time to understand it before moving forward. </p>
 	<a href="#top">Back to the Top</a>
 </div>
@@ -181,7 +191,317 @@
 			</tr>
 		</tbody>
 	</table>
-	<p> The 
+	<p> Of these parameters, we'll only concern ourselves with the "q", "limit", and "rating" parameters in this guide. The others are little out of our scope. So, let's look at an example of how we would modify a search using these three parameters. Let's say that we wanted to search for gifs from the movie, Mad Max, we only want the top five results, and gifs that were rated "pg". Our "params" variable would then become:</p>
+	<pre>
+	var params = "?q=mad+max&limit=5&rating=pg;</pre>
+	<p> You'll notice that I separated the terms in "mad max" with a "+". If you search any phrase, you'll need to separate each word like this. I also separated each parameter with a "&". This holds true for any HTTP query, the parameters are always separated by an "&".</p>
+	<p> Next, we'll quickly go over getting gifs by id.
+	<h3> Getting Gifs by ID:</h3>
+	<p> You probably won't use this part of the API that much, as you are just as likely to pull those specific gifs and reference them through a link or locally. That said, we'll go over it just in case.
+	<p> To search for a single ID, your variables would become:</p>
+	<pre>
+	var query = "/v1/gifs/";
+	var params = "YourID";</pre>
+	<p> The only extra step you would have to take is to find the ID of the gif that you would like to diplay and replace "YourID" with it.</p>
+	<p> To search multiple gifs, the variables you would use would be:</p>
+	<pre>
+	var query = "/v1/gifs";
+	var params = "?ids=OneID,AnotherID";</pre>
+	<p> In this case, we are sending the parameter "ids". This is just a list, separated by commas, of the IDs that you want to search.</p>
+	<p> The final queries we'll go over are the "Trending" and "Random" queries.</p>
+	<h3> Trending and Random:</h3>
+	<p> These two requests are the easiest to understand, as they don't require any parameters (thought you can use them). Let's look at the random query first:</p>
+	<pre>
+	var query = "/v1/gifs/random?";
+	var params = "?";</pre>
+	<p> By default, this will send you one random gif. However, you can use the parameter "rating" to limit the rating of the gif, if you'd like. Otherwise, it is completely random </p>
+	<p> The trending query is just as simple to perform:</p>
+	<pre>
+	var query = "/v1/gifs/trending";
+	var params = "?";</pre>
+	<p> If you were to make this query, you would get the top 25 trending gifs on GIPHY. You can also use the parameters "limit" and "rating" to narrow the results, as we did in the basic search.</p>
+	<p> Okay, so let's look at what we've gone over so far. We've learned...</p>
+	<ul>
+		<li>About what an API request is/does</li>
+		<li>How to set up an API request with Ajax</li>
+		<li>What queries we can make through Giphy's API</li>
+	</ul>
+	<p> Now it's finally time to learn how to deal with the data.</p>
+	<a href="#top">Back to the Top</a>
 </div>
+<div>
+	<a name="workingResponse">
+	<h2 class="centeredText"> Working with the Response</h2>
+	<p> Now that we've gone over how to search for exactly what we want, it is finally time to show you how to work with the results of that search. So, let's go back to that example I showed earlier in which I search for "batman" gifs, but this time we'll look at a cleaned up version of the <a href="http://api.giphy.com/v1/gifs/search?q=batman&api_key=dc6zaTOxFJmzC">example link</a>:</p>
+	<pre>
+	{
+	"data": [{
+		"type": "gif",
+		"id": "l3V0hWP5as4hPaxbi",
+		"slug": "batman-gotham-robin-l3V0hWP5as4hPaxbi",
+		"url": "http:\/\/giphy.com\/gifs\/batman-gotham-robin-l3V0hWP5as4hPaxbi",
+		"bitly_gif_url": "http:\/\/gph.is\/1SJHbw4",
+		"bitly_url": "http:\/\/gph.is\/1SJHbw4",
+		"embed_url": "http:\/\/giphy.com\/embed\/l3V0hWP5as4hPaxbi",
+		"username": "walternewton",
+		"source": "http:\/\/www.walternewton.com",
+		"rating": "",
+		"content_url": "",
+		"user": {
+			"avatar_url": "https:\/\/media2.giphy.com\/avatars\/walternewton\/e2di4APSGOai.gif",
+			"banner_url": "",
+			"profile_url": "https:\/\/giphy.com\/walternewton\/",
+			"username": "walternewton",
+			"display_name": "Walter Newton",
+			"twitter": "@walternewton"
+		},
+		"source_tld": "www.walternewton.com",
+		"source_post_url": "http:\/\/www.walternewton.com",
+		"import_datetime": "2016-04-27 10:27:29",
+		"trending_datetime": "1970-01-01 00:00:00",
+		"images": {
+			"fixed_height": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200.gif",
+				"width": "200",
+				"height": "200",
+				"size": "83792",
+				"mp4": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200.mp4",
+				"mp4_size": "39514",
+				"webp": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200.webp",
+				"webp_size": "148590"
+			},
+			"fixed_height_still": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200_s.gif",
+				"width": "200",
+				"height": "200"
+			},
+			"fixed_height_downsampled": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200_d.gif",
+				"width": "200",
+				"height": "200",
+				"size": "18700",
+				"webp": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200_d.webp",
+				"webp_size": "25638"
+			},
+			"fixed_width": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200w.gif",
+				"width": "200",
+				"height": "200",
+				"size": "83792",
+				"mp4": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200w.mp4",
+				"mp4_size": "39514",
+				"webp": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200w.webp",
+				"webp_size": "148590"
+			},
+			"fixed_width_still": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200w_s.gif",
+				"width": "200",
+				"height": "200"
+			},
+			"fixed_width_downsampled": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200w_d.gif",
+				"width": "200",
+				"height": "200",
+				"size": "18700",
+				"webp": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200w_d.webp",
+				"webp_size": "25638"
+			},
+			"fixed_height_small": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100.gif",
+				"width": "100",
+				"height": "100",
+				"size": "38346",
+				"mp4": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100.mp4",
+				"mp4_size": "18409",
+				"webp": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100.webp",
+				"webp_size": "71662"
+			},
+			"fixed_height_small_still": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100_s.gif",
+				"width": "100",
+				"height": "100"
+			},
+			"fixed_width_small": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100w.gif",
+				"width": "100",
+				"height": "100",
+				"size": "38346",
+				"mp4": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100w.mp4",
+				"mp4_size": "18409",
+				"webp": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100w.webp",
+				"webp_size": "71662"
+			},
+			"fixed_width_small_still": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/100w_s.gif",
+				"width": "100",
+				"height": "100"
+			},
+			"downsized": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy.gif",
+				"width": "480",
+				"height": "480",
+				"size": "193557"
+			},
+			"downsized_still": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy_s.gif",
+				"width": "480",
+				"height": "480"
+			},
+			"downsized_large": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy.gif",
+				"width": "480",
+				"height": "480",
+				"size": "193557"
+			},
+			"downsized_medium": {
+				"url": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy.gif",
+				"width": "480",
+				"height": "480",
+				"size": "193557"
+			},
+			"original": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy.gif",
+				"width": "480",
+				"height": "480",
+				"size": "193557",
+				"frames": "42",
+				"mp4": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy.mp4",
+				"mp4_size": "79212",
+				"webp": "http:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy.webp",
+				"webp_size": "298326"
+			},
+			"original_still": {
+				"url": "https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy_s.gif",
+				"width": "480",
+				"height": "480"
+			},
+			"looping": {
+				"mp4": "https:\/\/media.giphy.com\/media\/l3V0hWP5as4hPaxbi\/giphy-loop.mp4"
+			}
+		}
+	}</pre>
+	<h3>Analyzing the Object:</h3>
+	<p> This is much nicer than the result we saw before, right? But it is actually the same thing! This time, we can clearly see the "Name":"Value" structure that was mentioned earlier. From this view, it's not too difficult to check out the links that are given in the object. For example, if you copied the URL from the "fixed_width" property, you would get the gif:</p>
+	<div class="centeredClose">
+		<img src="https:\/\/media1.giphy.com\/media\/l3V0hWP5as4hPaxbi\/200w.gif">
+	</div>
+	<p> If you begin doing this for the other URLs, you'll find that they are all the same gif. Some of them just happen to be larger, smaller, stills of the gif, or are a different file format or quality. You can actually find which "Names" correspond to the formatting of the gif <a href="https://github.com/Giphy/GiphyAPI#upload-api">here</a> if you scroll up to the Rendition Guide. So, I won't go over the specific types much more than this.</p>
+	<h3>Getting the GIFs</h3>
+	<h4> Note: From here on out, I'm going to assume that you have previous knowledge of Javascript objects and arrays. If you don't, you can find a good summary of Javascript objects <a href="http://www.w3schools.com/js/js_object_definition.asp">here</a> and of arrays <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">here</a>.</h4>
+	<p> If you're ready to move on, we've reached the moment you've been waiting for: How to actually get the gifs from this file. To start, let's go back to our code from the Dealing with Javascript section:</p>
+	<pre>
+	var req = new XMLHttpRequest();
+
+	var base = "http://api.giphy.com/";
+	var query = "v1/gifs/search";
+	var params = "?q=batman";
+	var key = "&api_key=dc6zaTOxFJmzC";
+
+	req.open("GET", base + query + params + key, true);
+
+	req.addEventListener('load', function() {
+  		var response = JSON.parse(req.responseText);
+  		console.log(response.data)
+	});
+	req.send(null);</pre>
+	<p> Remember that this sends the array of 25 objects (the search results) to the browser's console. Though sending the response to the console isn't very useful, we're going to continue doing it until we know how to get what we want from the response. To do this, let's walk through an example in which we try to log the URL of the gif that I posted above.</p>
+	<p> We start by understanding what the variable response actually is. In the simplest sense, it is basically that long string of text that you see when you try to open the API request in your browser. If you look closer, you'll see the braces that indicate that it is an object. And so, without actually plugging anything into our code, let's consider these two lines:
+	<pre>
+	var response = JSON.parse(req.responseText);
+	console.log(response.data);</pre>
+	<p> We know that this outputs the list of results from our query, but why? Well, if you think about it, response is the object that contains the list of results as well as some other things, and if you look closely, the property named "data" is the exact property that contains those results.</p>
+	<p> Knowing this, we can actually write this as</p>
+	<pre>
+	var response = JSON.parse(req.responseText);
+	var listOfResults = response.data;
+	console.log(listOfResults);</pre>
+	<p>and it would log the same thing to the console. Interesting. So, how would we go about grabbing one of those results? Well, if "data" is an array (as indicated by the "[]" that follow it), we can use the Javascript notation for arrays to select an element. For example, if we wanted to log the first object to the console, we would know that it was located at place "0", so </p>
+	<pre>
+	var response = JSON.parse(req.responseText);
+	var listOfResults = response.data;
+	var firstResult = listOfResults[0];
+	console.log(firstResult);</pre>
+	<p> would log the first result from our search. Okay, so we now have access to our first result and all of the data that goes with it. From here, the code is pretty straight forward.</p>
+	<pre>
+	var response = JSON.parse(req.responseText);
+	var listOfResults = response.data;
+	var firstResult = listOfResults[0];
+	var ourGif = firstResult.images.fixed_width.url;
+	console.log(ourGif);</pre>
+	<p> I know, that was a pretty big jump at the end, but I trust that you can follow the path. For any of these object files, the gifs are located under the "image" property. After that, you just choose what format you want the gif to be (in this case, it was "fixed_width"), and specify that you want the URL.</p>
+	<p>I've posted a working example of this on <a href="http://codepen.io/domw117/pen/KzjvWv/">CodePen</a>. As with the last CodePen example, right-click and select inspect to see the console in the right sidebar. You should see the link for the gif. It will look something like this:</p>
+	<div class="centeredClose">
+		<img src="URLToConsoleExample.png">
+	</div>
+	<p> Feel free to play around with these variables to see what you get, before moving on.</p>
+	<a href="#top">Back to the Top</a>
+</div>
+<div>
+	<a name="htmlSection">
+	<h2 class="centeredText">From JSON to HTML</h2>
+	<p> We have made it to the last section of the guide, in which we will learn how to take these Javascript objects from the API request and send pieces of them to your HTML page. To demonstrate this, I will walk through how to display a gif from our search of "batman".</p>
+	<p> We'll start with the code we ended on in the last section:</p>
+		<pre>
+	var req = new XMLHttpRequest();
+
+	var base = "http://api.giphy.com/";
+	var query = "v1/gifs/search";
+	var params = "?q=batman";
+	var key = "&api_key=dc6zaTOxFJmzC";
+
+	req.open("GET", base + query + params + key, true);
+
+	req.addEventListener('load', function() {
+  		var response = JSON.parse(req.responseText);
+		var listOfResults = response.data;
+		var firstResult = listOfResults[0];
+		var ourGif = firstResult.images.fixed_width.url;
+		console.log(ourGif);
+	});
+	req.send(null);</pre>
+	<p> To compliment this, we are going to use this HTML code:</p>
+	<div class="centeredWide">
+		<img src="lastSectionHTML.png">
+	</div>
+	<p> The HTML is very simple for this example, as most of the work will be done through Javascript. Looking at the code, you can also see that I added an "img" tag with the id="insertGif". This just indicates that I'll be assigning our gif URL to that tag, and that the id will be used to find it. Knowing this, let's move on to the next step.</p> 
+	<p> To modify the "img" tag with the link to our gif, we are going to create a variable that references that tag. It will look like this:</p>
+	<pre>
+	var image = document.getElementById("insertGif"); </pre>
+	<p> This line of code references the document and utilizes the getElementById() function to find our tag with id="insertGif". It then assigns that element to the "image" variable. Next, we're going to modify that "img" tag's "src" with our gif URL.
+	<pre>
+	image.src = ourGif; </pre>
+	<p> And that should be it! Simple, right? </p>
+	<p> Our final bit of code should look like this:</p>
+	<pre>
+	var req = new XMLHttpRequest();
+
+	var base = "http://api.giphy.com/";
+	var query = "v1/gifs/search";
+	var params = "?q=batman";
+	var key = "&api_key=dc6zaTOxFJmzC";
+
+	req.open("GET", base + query + params + key, true);
+
+	req.addEventListener('load', function() {
+  	var response = JSON.parse(req.responseText);
+		var listOfResults = response.data;
+		var firstResult = listOfResults[0];
+		var ourGif = firstResult.images.fixed_width.url;
+		var image = document.getElementById("insertGif");
+    image.src = ourGif;
+	});
+	req.send(null);</pre>
+	<p> As with the previous examples, you can check out the working code for this on my <a href="http://codepen.io/domw117/pen/BKgwpY/">CodePen</a>. This time, you should be able to see the results show up in the space next to the code. Take the time to plug in different queries and parameters to see what shows up on the page.</p>
+	<p> And there you have it!</p>
+	<div class="centeredClose">
+		<img src="http:\/\/media3.giphy.com\/media\/ft7qtA4bDHPDa\/giphy.gif">
+	</div>
+	<p> You now know how to make API requests with Ajax, interpret the results, and load them into HTML. </p>
+	<h3>Thanks for reading!</h3>
+	<div class="centeredClose">
+		<img src="http:\/\/media3.giphy.com\/media\/jYAGkoghdmD9S\/giphy.gif">
+	</div>
+</div>
+<a href="#top">Back to the Top</a>
 </body>
 </html>
